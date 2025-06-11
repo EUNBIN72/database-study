@@ -81,6 +81,7 @@ WHERE (price * 0.9 > 30000 OR stock <= 20) AND NOT (price < 10000);
 
 -- 다음 products 테이블 생성과 데이터 삽입 쿼리를 보고 문제에 답하세요.
 
+
 -- products 테이블  생성
 CREATE TABLE products (
 	id INTEGER,           -- ID
@@ -167,7 +168,4 @@ WHERE category='전자기기' AND stock <= 10;
 
 -- 정답:
 SELECT name AS 제품명, price * stock  AS '총판매액' FROM products;
-
-
-
 
