@@ -185,3 +185,53 @@ CREATE TABLE actual_score (
     FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
 );
 
+
+
+
+SELECT * FROM goal_score WHERE member_no = 2;
+SELECT * FROM exam_type WHERE member_grade = 2 AND exam_type = 3;
+SELECT * FROM subject WHERE subject_name = '국어';
+INSERT INTO goal_score (member_no, exam_type_id, subject_id, target_score, target_level)
+VALUES
+(2, 4, 1, 85, 2),  -- 고두현, 2학년 3월, 국어
+(2, 4, 2, 90, 1);  -- 고두현, 2학년 3월, 수학
+
+
+INSERT INTO member_goal_detail (member_no, exam_type_id, goal_detail)
+VALUES (2, 4, '국어와 수학에서 모두 1등급을 목표로 꾸준히 학습하겠습니다.');
+
+SELECT 
+  m.member_name,
+  et.exam_type AS exam_month,
+  s.subject_name,
+  gs.target_score,
+  gs.target_level
+FROM goal_score gs
+JOIN member m ON gs.member_no = m.member_no
+JOIN exam_type et ON gs.exam_type_id = et.exam_type_id
+JOIN subject s ON gs.subject_id = s.subject_id
+WHERE gs.member_no = 2;
+
+INSERT INTO actual_score (member_no, exam_type_id, subject_id, actual_score, actual_level, actual_percentage, actual_rank)
+VALUES (2, 4, 1, 78, 3, 85.23, '124/532');
+
+SELECT 
+  JSON_ARRAYAGG(
+    JSON_OBJECT(
+      'subjectId', subject_id,
+      'subjectName', subject_name,
+      'subjectType', subject_type
+    )
+  ) AS subjects
+FROM subject
+WHERE subject_name IN ('국어', '수학', '영어', '한국사', '물리1', '화학1');
+
+SELECT 
+  JSON_OBJECT(
+    'examTypeId', exam_type_id,
+    'memberGrade', member_grade,
+    'examMonth', exam_type
+  ) AS examInfo
+FROM exam_type
+WHERE member_grade = 2 AND exam_type = 3;
+
